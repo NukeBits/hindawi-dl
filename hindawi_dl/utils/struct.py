@@ -8,11 +8,13 @@ class Book:
         title:str,
         url  :str, 
 
-        cover_url:str|None = None,
+        cover_url:str|None  = None,
+        authors  :list[str] = []
 
     ) -> None:
         self.id        = id
         self.title     = title,
         self.url       = url,
         self.cover_url = cover_url
+        self.authors   = authors    
 

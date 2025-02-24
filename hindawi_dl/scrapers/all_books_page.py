@@ -5,7 +5,7 @@
 from collections.abc   import Iterator
 from selectolax.parser import Node
 from hindawi_dl.utils  import Book
-from hindawi_dl.const  import URL
+from hindawi_dl.const  import URL, india2arbic
 from .utils            import Scraper
 import re
 
@@ -34,19 +34,7 @@ class AllBooksPage(Scraper):
 
 
     def _load_attr(self) -> tuple[int]:
-        india2arbic = {
-            '٠':'0',
-            '١':'1',
-            '٢':'2',
-            '٣':'3',
-            '٤':'4',
-            '٥':'5',
-            '٦':'6',
-            '٧':'7',
-            '٨':'8',
-            '٩':'9',
-        }
-
+        
         raw_txt = self.tree.css_first(".pagination .stats p").text(strip=True)
         raw_txt = raw_txt.translate(str.maketrans(india2arbic))
         self.__books_num = int(re.findall(r'(\d+)\s*كتاب', raw_txt)[0])
