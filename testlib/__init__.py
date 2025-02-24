@@ -1,2 +1,2 @@
 from .req_test import TestRequests
-from .scrapers import TestAllBookPage
+from .scrapers import TestAllBookPage, TestBookPage

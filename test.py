@@ -1,5 +1,5 @@
 from unittest import main
-from testlib import TestRequests, TestAllBookPage
+from testlib import TestRequests, TestAllBookPage, TestBookPage
 
 
 
