@@ -1,4 +1,5 @@
-# target https://www.hindawi.org/books/
+# target https://www.hindawi.org/books/(\d+/)?
+# target https://www.hindawi.org/books/categories/[a-zA-Z.-_]/(\d+/)?
 
 
 from collections.abc   import Iterator
