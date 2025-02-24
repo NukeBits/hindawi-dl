@@ -20,17 +20,17 @@ class TestAllBookPage(TestCase):
 
 
     def test_pages(self):
-        max_pages = AllBooksPage(html).max_pages
+        total_pages = AllBooksPage(html).total_pages
 
-        self.assertEqual(type(max_pages), int)
-        self.assertTrue(max_pages>0)
+        self.assertEqual(type(total_pages), int)
+        self.assertTrue(total_pages>=175) # according to the last visit of website that should be correct 
 
 
 
-    def test_books_num(self):
-        books_num = AllBooksPage(html).books_num
+    def test_total_books(self):
+        total_books = AllBooksPage(html).total_books
 
-        self.assertEqual(type(books_num), int)
-        self.assertTrue(books_num>0) 
+        self.assertEqual(type(total_books), int)
+        self.assertTrue(total_books>3000) 
 
 
