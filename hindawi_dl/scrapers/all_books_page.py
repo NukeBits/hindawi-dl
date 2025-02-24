@@ -3,10 +3,9 @@
 
 
 from collections.abc   import Iterator
-from selectolax.parser import Node
+from selectolax.parser import Node, HTMLParser
 from hindawi_dl.utils  import Book
 from hindawi_dl.const  import URL, india2arbic
-from .utils            import Scraper
 import re
 
 
@@ -15,9 +14,27 @@ import re
 
 
 
-class AllBooksPage(Scraper):
-    __max_pages:int
-    __books_num:int
+class AllBooksPage:
+    __total_pages :int|None
+    __total_books :int|None
+    books_iterator:Iterator[Book]
+
+
+
+    def __init__(self, htmlcode:str|bytes) -> None:
+        parser = HTMLParser(htmlcode)
+
+        self.books_iterator = map(
+            AllBooksPage._node2Book,
+            parser.css(".books_covers ul > li")
+        )
+
+        self.__total_pages = None
+        self.__total_books = None
+        self._load_attr(parser)
+
+
+        
 
 
 
@@ -33,37 +50,31 @@ class AllBooksPage(Scraper):
         
 
 
-    def _load_attr(self) -> tuple[int]:
+    def _load_attr(self, parser:HTMLParser) -> tuple[int]:
         
-        raw_txt = self.tree.css_first(".pagination .stats p").text(strip=True)
-        raw_txt = raw_txt.translate(str.maketrans(india2arbic))
-        self.__books_num = int(re.findall(r'(\d+)\s*كتاب', raw_txt)[0])
-        self.__max_pages = self.__books_num//20 + (self.__books_num%20>0)
-        return self.__max_pages, self.__books_num
+        raw_txt = parser.css_first(".list-nested.parent.selected > li > a span.count").text(strip=True)
+        self.__total_books = int(raw_txt.translate(str.maketrans(india2arbic)))
+        self.__total_pages = self.__total_books//20 + (self.__total_books%20>0)
 
 
 
-    def books(self) -> Iterator[Book]:
-        all_books = self.tree.css(".books_covers ul > li")
-        return map(AllBooksPage._node2Book, all_books)
+    def books(self) -> list[Book]:
+        return list(self.books_iterator)
+
+
+    @property
+    def total_pages(self) -> int:
+        """total pages number of all pages in the website"""
+        return self.__total_pages
+    
 
 
 
     @property
-    def max_pages(self) -> int:
-        try:
-            return self.__max_pages
-        except AttributeError:
-            return self._load_attr()[0]
+    def total_books(self) -> int:
+        """total books that exists in the website."""
+        return self.__total_books
 
-
-
-    @property
-    def books_num(self) -> int:
-        try:
-            return self.__books_num
-        except AttributeError:
-            return self._load_attr()[1]
             
 
 
