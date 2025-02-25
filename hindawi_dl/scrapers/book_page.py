@@ -38,9 +38,16 @@ class BookPage:
 
     def book(self) -> Book:
         return Book(
-            id    = self.id,
-            title = '',
-            url   = self.url,
+            id       = self.id,
+            title    = self.title,
+            url      = self.url,
+            authors  = self.authors,
+            content  = self.content,
+            pdf      = self.pdf,
+            kfx      = self.kfx,
+            epub     = self.epub, 
+            words    = self.word_count,
+            tags     = self.tags  
         )
     
 
