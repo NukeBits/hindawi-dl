@@ -1,4 +1,5 @@
 import re
+from typing                  import assert_type
 from unittest                import TestCase
 from hindawi_dl.scrapers     import BookPage
 from requests                import get as GET
@@ -40,6 +41,13 @@ class TestBookPage(TestCase):
 	        self.assertTrue(type(bk.content)    == str )
 	        self.assertTrue(type(bk.word_count) == int )
 	        self.assertTrue(type(bk.tags)       == list)
+
+
+
+    def test_book_func(self):
+        for html in html_files:
+            book = BookPage(html, urls[1]).book()
+            self.assertTrue(type(book) == Book)
 	        
 	        
 	
